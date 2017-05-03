@@ -1,31 +1,15 @@
 /**
  * Created by Mark on 27/04/2017.
  */
-//
-//  Helper Functions
-//
-//
-//
-// REQUEST TYPES //
-var get = 'GET';
-var post = 'POST';
-var update = 'UPDATE';
-var del = 'DELETE';
-var currentData = false;
 
-// EXTERNAL API LINKS
-var currentEarthquakes = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson';
-var oldcurrents = [];
+var get = 'GET';
+var json = "json";
+var xml = "xml";
 var map;
 var markers = [];
-var format='/?format=json';
-var where = 'local';
-
 var currentMarker = null;
-// http://127.0.0.1:8000/luasStop/?lat=-6.37458888888889&lng=53.287494444444398
 
-
-function request(type, url_, handledata) {
+function request(type, url_, format, handledata) {
     var data_ = {};
     console.log("Made it to request : url : " + url_ + '  -- -- : type : ' + type);
     return $.ajax({
@@ -33,21 +17,7 @@ function request(type, url_, handledata) {
       type:type,
       headers: {
       },
-      dataType:"json"
-    }).done(function(data) {
-         handledata(data);
-    });
-}
-
-function requestXML(type, url_, handledata) {
-    var data_ = {};
-    console.log("Made it to request : url : " + url_ + '  -- -- : type : ' + type);
-    return $.ajax({
-      url:url_,
-      type:type,
-      headers: {
-      },
-      dataType:"xml"
+      dataType:format
     }).done(function(data) {
          handledata(data);
     });
@@ -57,14 +27,14 @@ function GetRailways(handledata) {
     var api = "http://mark2017webmapping.herokuapp.com/railways";
     // var api = "http://127.0.0.1/railways"
 
-    request(get, api, handledata);
+    request(get, api, "json", handledata);
 }
 
 function GetLuas(handledata) {
     var api = "http://mark2017webmapping.herokuapp.com/luas";
     // var api = "http://127.0.0.1/luas"
 
-    request(get, api, handledata);
+    request(get, api, json, handledata);
 }
 
 function GetStationTimes(data){
@@ -111,9 +81,8 @@ function addRailwaysToMap(data) {
 
 function addLuasToMap(data) {
         markers = [];
-        console.log(data);
         $.each(data, function (index) {
-            console.log(data[index].line);
+
             var point = data[index].point.match(/\(([^)]+)\)/)[1];
             var lat_lng = point.split(" ");
             var lat = lat_lng[1];
@@ -142,23 +111,39 @@ function addLuasToMap(data) {
                 var mark = L.marker(latlng, {icon: greenMarker}).addTo(map).bindPopup(data[index].name).on('click', onClick);
                 markers.push(mark);
             }
-
-
         });
 }
 
 function addStationTimesToMap(data)
 {
-    console.log(data);
+    //TODO QUERY TRAIN STATION TIMES
+    // console.log(data);
 }
 
 function getLuasStopInfo(data)
 {
-    console.log(data);
-
     var api = "http://luasforecasts.rpa.ie/xml/get.ashx?action=forecast&stop="+data[0].symbol+"&encrypt=false";
+    request(get, api, xml, GetStationTimes);
+}
 
-    requestXML(get, api, GetStationTimes);
+function searchLuas(stopName)
+{
+    var api = "http://mark2017webmapping.herokuapp.com/luas/name/?name="+stopName;
+    console.log(stopName);
+    request(get, api, json, luasStop);
+
+}
+
+function luasStop(data)
+{
+    var point = data[0].point.match(/\(([^)]+)\)/)[1];
+    var lat_lng = point.split(" ");
+    var lat = lat_lng[1];
+    var lng = lat_lng[0];
+    var latlng = L.latLng(lat, lng);
+
+    map.panTo(latlng);
+    map.setZoom(18);
 }
 
 function RemoveAllMarkers() {
@@ -169,33 +154,15 @@ function RemoveAllMarkers() {
     markers = [];
 }
 
-// REQUESTS
-
 function onClick(e)
 {
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
 
-    // var api = "http://127.0.0.1:8000/luasStop/?lat=-6.37458888888889&lng=53.287494444444398"
+    // var api = "http://127.0.0.1:8000/luasStop/?lat="+lng+"&lng="+lat;
     var api = "http://mark2017webmapping.herokuapp.com/luasStop/?lat="+lng+"&lng="+lat;
-    console.log(e);
-
     currentMarker = e;
-    request(get, api, getLuasStopInfo);
-
-}
-
-
-function GetRailwaysToMap() {
-    GetRailways(addRailwaysToMap);
-}
-
-function GetLuasToMap() {
-    GetLuas(addLuasToMap);
-}
-
-function GetStationTimesToMap() {
-    GetStationTimes(addStationTimesToMap);
+    request(get, api, "json", getLuasStopInfo);
 }
 
 

@@ -57,7 +57,6 @@ function GetStationTimes(data){
 
 
 function addRailwaysToMap(data) {
-        markers = [];
         $.each(data, function (index) {
 
             var point = data[index].point.match(/\(([^)]+)\)/)[1];
@@ -80,9 +79,8 @@ function addRailwaysToMap(data) {
 
 
 function addLuasToMap(data) {
-        markers = [];
         $.each(data, function (index) {
-            console.log(data[index].line);
+
             var point = data[index].point.match(/\(([^)]+)\)/)[1];
             var lat_lng = point.split(" ");
             var lat = lat_lng[1];
@@ -129,23 +127,34 @@ function getLuasStopInfo(data)
 function searchLuas(stopName)
 {
     var api = "http://mark2017webmapping.herokuapp.com/luas/name/?name="+stopName;
-    console.log(stopName);
     request(get, api, json, luasStop);
-
 }
 
-function luasStop(data)
+function searchRailway(stopName)
 {
-    console.log(data);
+    var api = "http://mark2017webmapping.herokuapp.com/railways/name/?name="+stopName;
+    request(get, api, json, railwayStop);
+}
+
+function railwayStop(data)
+{
     var point = data[0].point.match(/\(([^)]+)\)/)[1];
     var lat_lng = point.split(" ");
     var lat = lat_lng[1];
     var lng = lat_lng[0];
     var latlng = L.latLng(lat, lng);
-    console.log(lat);
-    console.log(lng);
-    console.log(latlng);
-    console.log(lat_lng);
+
+    map.panTo(latlng);
+    map.setZoom(18);
+}
+
+function luasStop(data)
+{
+    var point = data[0].point.match(/\(([^)]+)\)/)[1];
+    var lat_lng = point.split(" ");
+    var lat = lat_lng[1];
+    var lng = lat_lng[0];
+    var latlng = L.latLng(lat, lng);
 
     map.panTo(latlng);
     map.setZoom(18);

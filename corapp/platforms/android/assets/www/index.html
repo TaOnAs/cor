@@ -65,26 +65,24 @@
 
         <div data-role="page" id="mapp">
 
-            <!--<div data-role="header">-->
-                <!--<div data-role="controlgroup" data-type="horizontal" data-mini="true" >-->
-                    <!--&lt;!&ndash;<a data-role="button" data-icon="location" id="today">Recent</a>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<a data-role="button" data-icon="gear" >Options</a>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<a data-role="button" data-icon="power" class="ui-btn-right" id="logout">Logout</a>&ndash;&gt;-->
-                    <!--<h2>Trains</h2>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div data-role="header">
+                <div data-role="controlgroup" data-type="horizontal" data-mini="true" >
+                    <a data-role="button" data-icon="location" id="today">Me</a>
+                    <!--<a data-role="button" data-icon="gear" >Options</a>-->
+                    <!--<a data-role="button" data-icon="power" class="ui-btn-right" id="logout">Logout</a>-->
+                </div>
+            </div>
 
             <div data-role="main" id="map" class="ui-content" style="height : 1000px">
                 <br/>
             </div>
 
             <div data-role="footer" data-position="fixed" >
-                <input name="date" id="searchdate" class="i-txt"/>
-                    <a data-role="button" data-icon="search" class="ui-btn-right" id="datesearch-but">Search</a>
+                <input name="date" id="searchField" class="i-txt"/>
+                    <a data-role="button" data-icon="search" class="ui-btn-right" id="searchButton">Search</a>
 
             </div>
         </div>
-
 
         <script type="text/javascript" src="js/map.js"></script>
         <script type="text/javascript" src="js/stuff.js"></script>

@@ -2,12 +2,16 @@
  * Created by Mark on 27/04/2017.
  */
 
-$(document).on("click", '#datesearch-but', function(){
-    // GetBySingleDateAndAddToMap($('#searchdate').val());
-    RemoveAllMarkers();
-    GetRailwaysToMap();
-    GetLuasToMap();
-    GetStationTimesToMap();
+$(document).on("click", '#searchButton', function(){
+    // GetBySingleDateAndAddToMap($('#search').val());
+    // RemoveAllMarkers();
+    // GetRailways(addRailwaysToMap);
+    // GetLuas(addLuasToMap);
+    // GetStationTimes(addStationTimesToMap);
+    console.log("AYO");
+    var field = $('#searchField').val();
+    console.log("FIELD " + field);
+    searchLuas(field);
 });
 
 $('#dateform').submit(function() {
@@ -35,11 +39,6 @@ $(document).on("click", "#submit-log", function() {
         });
 });
 
-$(document).on("click", '#today', function() {
-    console.log("Found my way here");
-    GetUpToDate();
-    currentData = true;
-});
 
 $(document).on("click", '#logout', function() {
     //console.log("Happening");
@@ -51,73 +50,70 @@ $(document).on("click", '#logout', function() {
     GetNearMe();
 });
 
+var currentUserMarker = null;
+var userCircle = null;
+
 function readyPage() {
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
-        function onSuccess(position) {
-            map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
-            L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            maxZoom: 20,
-            }).addTo(map);
 
-            var radius = position.coords.accuracy / 2;
+    function onSuccess(position) {
+        map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
+        L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        }).addTo(map);
 
-            var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+        var radius = position.coords.accuracy / 2;
 
-            var userMarker = L.AwesomeMarkers.icon({
-                icon: 'user',
-                prefix: 'fa',
-                markerColor: 'blue'
-              });
+        var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
 
-            L.marker(latlng,{icon: userMarker}).addTo(map)
-                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+        var userMarker = L.AwesomeMarkers.icon({
+            icon: 'user',
+            prefix: 'fa',
+            markerColor: 'blue'
+          });
 
-             L.circle(latlng, radius).addTo(map);
+        currentUserMarker = L.marker(latlng,{icon: userMarker}).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
 
-            map.locate({setView: true, maxZoom: 20});
-            map.setZoom(20);
+        userCircle = L.circle(latlng, radius).addTo(map);
 
-            RemoveAllMarkers();
-            GetRailwaysToMap();
-            GetLuasToMap();
-            GetStationTimesToMap();
-        }
+        map.locate({setView: true, maxZoom: 20});
+        map.setZoom(18);
 
-        function onError() {
-            console.log("Sad times");
-        }
+        RemoveAllMarkers();
+        GetRailways(addRailwaysToMap);
+        GetLuas(addLuasToMap);
+        GetStationTimes(addStationTimesToMap);
+    }
 
-        location.hash = "#mapp";
+    function onError() {
+        console.log("ERROR");
+    }
+
+    location.hash = "#mapp";
 
 }
+
+var watchID = navigator.geolocation.watchPosition(onSuccessful, onErrors, { timeout: 10000 });
+
+function onSuccessful(position) {
+    var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+    var radius = position.coords.accuracy / 2;
+
+    currentUserMarker.setLatLng(latlng);
+    userCircle.setLatLng(latlng);
+
+    console.log("{P{" + currentUserMarker._map._popup);
+    currentUserMarker._map._popup.setContent("You are within " + radius + " meters from this point");
+}
+
+function onErrors() {
+    console.log("ERROR");
+}
+
 $( document ).ready(function() {
         readyPage();
 
 });
 
 
-function onLocationFound(e) {
-
-    console.log("FOUND");
-    var radius = e.accuracy / 2;
-
-    L.marker(e.latlng).addTo(map)
-        .bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-    L.circle(e.latlng, radius).addTo(map);
-}
-
-$(document).on('locationfound', onLocationFound);
-
-function onLocationError(e) {
-    alert(e.message);
-}
-
-$(document).on('locationerror', onLocationError);
-
-$(document).on('pagebeforeshow', '#mainpage', function(){
-    $('#searchdate').mobipick({
-        dateFormat: "MM-dd-yyyy"
-    });
-});
