@@ -28,22 +28,68 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+           integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+           crossorigin=""/>
+
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"
+               integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
+               crossorigin=""></script>
+
+
+        <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="css/dist/leaflet.awesome-markers.css">
+        <script src="css/dist/leaflet.awesome-markers.js"></script>
+
+
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+        <script src="http://mobipick.sustainablepace.net/js/mobipick.js"></script>
+        <script src="http://mobipick.sustainablepace.net/external/xdate.js"></script>
+        <link rel="stylesheet" href="http://mobipick.sustainablepace.net/css/mobipick.css" />
+
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <title>World</title>
     </head>
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+        <div data-role="page" id="mapp">
+
+            <!--<div data-role="header">-->
+                <!--<div data-role="controlgroup" data-type="horizontal" data-mini="true" >-->
+                    <!--&lt;!&ndash;<a data-role="button" data-icon="location" id="today">Recent</a>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a data-role="button" data-icon="gear" >Options</a>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a data-role="button" data-icon="power" class="ui-btn-right" id="logout">Logout</a>&ndash;&gt;-->
+                    <!--<h2>Trains</h2>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <div data-role="main" id="map" class="ui-content" style="height : 1000px">
+                <br/>
+            </div>
+
+            <div data-role="footer" data-position="fixed" >
+                <input name="date" id="searchdate" class="i-txt"/>
+                    <a data-role="button" data-icon="search" class="ui-btn-right" id="datesearch-but">Search</a>
+
             </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+
+
+        <script type="text/javascript" src="js/map.js"></script>
+        <script type="text/javascript" src="js/stuff.js"></script>
+        <script src="css/dist/leaflet.awesome-markers.js"></script>
+
+
     </body>
 </html>
