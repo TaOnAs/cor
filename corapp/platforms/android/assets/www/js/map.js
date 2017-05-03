@@ -2,59 +2,37 @@
  * Created by Mark on 27/04/2017.
  */
 
+//Event trigger when serach button clicked
 $(document).on("click", '#searchButton', function(){
-    // GetBySingleDateAndAddToMap($('#search').val());
-    // RemoveAllMarkers();
-    // GetRailways(addRailwaysToMap);
-    // GetLuas(addLuasToMap);
-    // GetStationTimes(addStationTimesToMap);
-    console.log("AYO");
+    //get text in the serach field
     var field = $('#searchField').val();
-    console.log("FIELD " + field);
     searchLuas(field);
+    searchRailway(field);
 });
 
-$('#dateform').submit(function() {
-    // Get all the forms elements and their values in one step
-    var values = $(this).serialize();
-    console.log(values);
-    location.reload();
+//Event triggered when me button clicked
+//pans to users location
+$(document).on("click", '#me', function(){
+     map.panTo(currentUserMarker._latlng);
+     map.setZoom(18);
 });
 
-$(document).on("click", "#submit-log", function() {
-    $.post(BuildUserApiVar(), $('#loginform').serialize())
-        .done(function(data) {
-            console.log(data);
-            if(data['token'] != null) {
-                var token = data['token'];
-
-                console.log(token);
-                window.localStorage.setItem('token', token);
-                location.hash = "#mapp";
-                readyPage();
-            } else {
-                alert("Incorrect credentials");
-            }
-
-        });
+//Event triggered when refresh button clicked
+//Removes all markers and requeries api to re add markers
+$(document).on("click", '#refresh', function(){
+    RemoveAllMarkers();
+    GetRailways(addRailwaysToMap);
+    GetLuas(addLuasToMap);
+    GetStationTimes(addStationTimesToMap);
 });
 
-
-$(document).on("click", '#logout', function() {
-    //console.log("Happening");
-    //window.localStorage.clear();
-    //currentData = false;
-    //markers = [];
-    //location.hash="#loginorcreate";
-    console.log("Click occurred");
-    GetNearMe();
-});
-
+//stores users location marker and circle radius
 var currentUserMarker = null;
 var userCircle = null;
 
+//setup map, and markers
 function readyPage() {
-
+    //get devices current position
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
     function onSuccess(position) {
@@ -64,7 +42,6 @@ function readyPage() {
         }).addTo(map);
 
         var radius = position.coords.accuracy / 2;
-
         var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
 
         var userMarker = L.AwesomeMarkers.icon({
@@ -73,13 +50,13 @@ function readyPage() {
             markerColor: 'blue'
           });
 
+        //create user marker and accuracy circle
         currentUserMarker = L.marker(latlng,{icon: userMarker}).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
-
         userCircle = L.circle(latlng, radius).addTo(map);
-
         map.locate({setView: true, maxZoom: 20});
         map.setZoom(18);
 
+        //load markers
         RemoveAllMarkers();
         GetRailways(addRailwaysToMap);
         GetLuas(addLuasToMap);
@@ -89,21 +66,20 @@ function readyPage() {
     function onError() {
         console.log("ERROR");
     }
-
-    location.hash = "#mapp";
-
+    location.hash = "#pageContainer";
 }
 
+//Watch for change in user location
 var watchID = navigator.geolocation.watchPosition(onSuccessful, onErrors, { timeout: 10000 });
 
+//update user location
 function onSuccessful(position) {
     var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
     var radius = position.coords.accuracy / 2;
-
+    console.log(currentUserMarker);
     currentUserMarker.setLatLng(latlng);
     userCircle.setLatLng(latlng);
 
-    console.log("{P{" + currentUserMarker._map._popup);
     currentUserMarker._map._popup.setContent("You are within " + radius + " meters from this point");
 }
 
@@ -111,9 +87,9 @@ function onErrors() {
     console.log("ERROR");
 }
 
+//event triggers on page load
 $( document ).ready(function() {
         readyPage();
-
 });
 
 

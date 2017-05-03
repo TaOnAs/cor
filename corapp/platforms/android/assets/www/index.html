@@ -41,14 +41,9 @@
                integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
                crossorigin=""></script>
 
-
         <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
-
         <link rel="stylesheet" href="css/dist/leaflet.awesome-markers.css">
         <script src="css/dist/leaflet.awesome-markers.js"></script>
-
-
-
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -57,19 +52,16 @@
         <script src="http://mobipick.sustainablepace.net/js/mobipick.js"></script>
         <script src="http://mobipick.sustainablepace.net/external/xdate.js"></script>
         <link rel="stylesheet" href="http://mobipick.sustainablepace.net/css/mobipick.css" />
-
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>World</title>
     </head>
     <body>
 
-        <div data-role="page" id="mapp">
-
+        <div data-role="page" id="pageContainer">
             <div data-role="header">
                 <div data-role="controlgroup" data-type="horizontal" data-mini="true" >
-                    <a data-role="button" data-icon="location" id="today">Me</a>
-                    <!--<a data-role="button" data-icon="gear" >Options</a>-->
-                    <!--<a data-role="button" data-icon="power" class="ui-btn-right" id="logout">Logout</a>-->
+                    <a data-role="button" data-icon="location" id="me">Me</a>
+                    <a data-role="button" data-icon="refresh" class="ui-btn-right" id="refresh">Refresh</a>
                 </div>
             </div>
 
@@ -80,14 +72,11 @@
             <div data-role="footer" data-position="fixed" >
                 <input name="date" id="searchField" class="i-txt"/>
                     <a data-role="button" data-icon="search" class="ui-btn-right" id="searchButton">Search</a>
-
             </div>
         </div>
 
         <script type="text/javascript" src="js/map.js"></script>
-        <script type="text/javascript" src="js/stuff.js"></script>
+        <script type="text/javascript" src="js/apiRequests.js"></script>
         <script src="css/dist/leaflet.awesome-markers.js"></script>
-
-
     </body>
 </html>

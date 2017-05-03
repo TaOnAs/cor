@@ -9,9 +9,8 @@ var map;
 var markers = [];
 var currentMarker = null;
 
+
 function request(type, url_, format, handledata) {
-    var data_ = {};
-    console.log("Made it to request : url : " + url_ + '  -- -- : type : ' + type);
     return $.ajax({
       url:url_,
       type:type,
@@ -23,13 +22,14 @@ function request(type, url_, format, handledata) {
     });
 }
 
+//get full list of railways stored in the database
 function GetRailways(handledata) {
     var api = "http://mark2017webmapping.herokuapp.com/railways";
     // var api = "http://127.0.0.1/railways"
-
     request(get, api, "json", handledata);
 }
 
+//get full list of luass
 function GetLuas(handledata) {
     var api = "http://mark2017webmapping.herokuapp.com/luas";
     // var api = "http://127.0.0.1/luas"
@@ -51,7 +51,7 @@ function GetStationTimes(data){
     var outboundDue = y[0].childNodes[2].firstChild.attributes[0].nodeValue;
     var outboundDest = y[0].childNodes[2].firstChild.attributes[1].nodeValue;
 
-    var popup = stopName + "<br/> Status " + status + "<br/>" + inbound + " to " + inboundDest + " => " + inboundDue + "<br/>" + outbound + " to " + outboundDest + "  => " + outboundDue;
+    var popup = "<B>" + stopName + "</B><br/> Status " + status + "<br/>" + inbound + " to " + inboundDest + " => " + inboundDue + "<br/>" + outbound + " to " + outboundDest + "  => " + outboundDue;
     currentMarker.target._popup.setContent(popup);
 }
 
@@ -72,7 +72,7 @@ function addRailwaysToMap(data) {
                 markerColor: 'orange'
               });
 
-            var mark = L.marker(latlng,{icon: orangeMarker}).addTo(map).bindPopup(data[index].namn1);
+            var mark = L.marker(latlng,{icon: orangeMarker}).addTo(map).bindPopup("<B>" + data[index].namn1 + "</B>");
             markers.push(mark);
         });
 }
